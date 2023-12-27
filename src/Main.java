@@ -19,7 +19,7 @@ public class Main {
         MyGraph myGraph = new MyGraph();
 
         FileWriter task1 = new FileWriter("task1-out.txt", true);
-//        FileWriter task2 = new FileWriter("task2-out.txt", true);
+        FileWriter task2 = new FileWriter("task2-out.txt", true);
 
         // Create and store airport objects
         File file = new File("TR-0-airports.csv");
@@ -82,11 +82,12 @@ public class Main {
             Long deadline = Long.parseLong(missionDetails[3]);  // Deadline of the current mission
 
             myGraph.findShortestPathTask1(airportOrigin, timeOrigin, airportDestination, task1);
+            myGraph.findShortestPathTask2(airportOrigin, timeOrigin, airportDestination, deadline, task2);
         }
         input.close();
 
 
         task1.close();
-//        task2.close();
+        task2.close();
     }
 }
