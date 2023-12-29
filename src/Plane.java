@@ -6,8 +6,8 @@ public class Plane {
         this.model = model;
     }
 
-    // Get the duration of flight according to the plane model
-    public int getDuration(int distance) {
+    // Get the duration of flight according to the plane model in seconds
+    public long getDuration(double distance) {
         switch (this.model){
             case "Carreidas 160" -> {
                 return getDurationCarreidas(distance);
@@ -25,39 +25,39 @@ public class Plane {
         return -1;
     }
 
-    private int getDurationCarreidas(int distance) {
+    private long getDurationCarreidas(double distance) {
         if(distance <= 175)
-            return 6;
+            return 6 * 3600;
         else if(distance <= 350)
-            return 12;
+            return 12 * 3600;
         else
-            return 18;
+            return 18 * 3600;
     }
 
-    private int getDurationOrion(int distance) {
+    private long getDurationOrion(double distance) {
         if(distance <= 1500)
-            return 6;
+            return 6 * 3600;
         else if(distance <= 3000)
-            return 12;
+            return 12 * 3600;
         else
-            return 18;
+            return 18 * 3600;
     }
 
-    private int getDurationSkyfleet(int distance) {
+    private long getDurationSkyfleet(double distance) {
         if(distance <= 500)
-            return 6;
+            return 6 * 3600;
         else if(distance <= 1000)
-            return 12;
+            return 12 * 3600;
         else
-            return 18;
+            return 18 * 3600;
     }
 
-    private int getDurationSkyhopper(int distance) {
+    private long getDurationSkyhopper(double distance) {
         if(distance <= 2500)
-            return 6;
+            return 6 * 3600;
         else if(distance <= 5000)
-            return 12;
+            return 12 * 3600;
         else
-            return 18;
+            return 18 * 3600;
     }
 }

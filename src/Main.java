@@ -72,6 +72,7 @@ public class Main {
             case "Orion III" -> plane = planes[1];
             case "Skyfleet S570" -> plane = planes[2];
             case "T-16 Skyhopper" -> plane = planes[3];
+            default -> throw new IllegalStateException("Unexpected value: " + planeModel);
         }
 
         while(input.hasNextLine()) {
@@ -82,7 +83,7 @@ public class Main {
             Long deadline = Long.parseLong(missionDetails[3]);  // Deadline of the current mission
 
             myGraph.findShortestPathTask1(airportOrigin, timeOrigin, airportDestination, task1);
-            myGraph.findShortestPathTask2(airportOrigin, timeOrigin, airportDestination, deadline, task2);
+            myGraph.findShortestPathTask2(airportOrigin, timeOrigin, airportDestination, deadline, plane, task2);
         }
         input.close();
 

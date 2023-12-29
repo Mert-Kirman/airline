@@ -20,6 +20,9 @@ public class Airport implements Comparable<Airport> {
     // Cost of this airport node
     public double cost;
 
+    // Current time at this airport, used for Task-2
+    long currentTime;
+
     Airport(String airportCode, String airfieldName, double latitude, double longitude, int parkingCost) {
         this.airportCode = airportCode;
         this.airfieldName = airfieldName;
@@ -30,6 +33,8 @@ public class Airport implements Comparable<Airport> {
         this.neighborAirports = new ArrayList<>();
         this.shortestPath = new LinkedList<>();
         this.cost = Double.MAX_VALUE;
+
+        this.currentTime = 0;
     }
 
     public void updateCost(double cost) {
