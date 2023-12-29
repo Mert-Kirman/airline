@@ -1,6 +1,5 @@
 // Create airport objects which will be used as nodes in "MyGraph"
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Airport implements Comparable<Airport> {
@@ -23,7 +22,16 @@ public class Airport implements Comparable<Airport> {
     // Current time at this airport, used for Task-2
     long currentTime;
 
-    Airport(String airportCode, String airfieldName, double latitude, double longitude, int parkingCost) {
+    // Dummy airport object that will be used as a reference to the original airport object
+    public Airport(String airportCode, long currentTime, double cost) {
+        this.airportCode = airportCode;
+        this.currentTime = currentTime;
+        this.cost = cost;
+
+        this.shortestPath = new LinkedList<>();
+    }
+
+    public Airport(String airportCode, String airfieldName, double latitude, double longitude, int parkingCost) {
         this.airportCode = airportCode;
         this.airfieldName = airfieldName;
         this.latitude = latitude;
@@ -35,10 +43,6 @@ public class Airport implements Comparable<Airport> {
         this.cost = Double.MAX_VALUE;
 
         this.currentTime = 0;
-    }
-
-    public void updateCost(double cost) {
-        this.cost = cost;
     }
 
     public void add(Airport neighborAirport) {
