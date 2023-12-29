@@ -109,13 +109,10 @@ public class MyGraph {
 
             // If the target airport is reached, check if a better path with less cost is found
             if(minDistanceAirport.airportCode.equals(airportDestination.airportCode)) {
-                if(minDistanceAirport.cost < this.leastCost) {  // A new flight path with less cost is found, update
-                    this.bestSequence = minDistanceAirport.shortestPath;
-                    this.leastCost = minDistanceAirport.cost;
-                    this.solutionFound = true;
-//                    this.bestSequence.add(minDistanceAirport);
-                }
-                continue;
+                this.bestSequence = minDistanceAirport.shortestPath;
+                this.leastCost = minDistanceAirport.cost;
+                this.solutionFound = true;
+                break;
             }
 
             // Add the parking scenario of the current airport into minheap if it does not exceed the deadline
@@ -145,14 +142,9 @@ public class MyGraph {
                     Airport dummyNeighborAirport = new Airport(neighborAirport.airportCode, minDistanceAirport.currentTime + flightDuration, minDistanceAirport.cost + edgeCost);
 
                     LinkedList<Airport> shortestPath = new LinkedList<>(minDistanceAirport.shortestPath);
-//                    if(minDistanceAirport.airportCode.equals(dummyNeighborAirport.airportCode)) {  // Same node as parent node which means park operation
-//                        shortestPath.add(new Airport("PARK", minDistanceAirport.currentTime, minDistanceAirport.cost));
-//                    }
-//                    else {
-//                        shortestPath.add(minDistanceAirport);
-//                    }
                     shortestPath.add(dummyNeighborAirport);
                     dummyNeighborAirport.shortestPath = shortestPath;
+
                     minHeap.add(dummyNeighborAirport);
                 }
             }
