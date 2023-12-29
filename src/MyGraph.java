@@ -15,6 +15,9 @@ public class MyGraph {
     public double leastCost;
     public boolean solutionFound;
 
+    // Keep track of the least cost of a vertex - time pair
+    private final HashMap<String, Double> vertexTimeCostTable;
+
     public MyGraph() {
         this.allAirports = new HashMap<>();
         this.airfields = new HashMap<>();
@@ -22,6 +25,8 @@ public class MyGraph {
         this.bestSequence = new LinkedList<>();
         this.leastCost = Double.MAX_VALUE;
         this.solutionFound = false;
+
+        this.vertexTimeCostTable = new HashMap<>();
     }
 
     // Find successive possible flight operations from origin to destination. There is no deadline and all flights are happening at TimeOrigin
@@ -107,7 +112,7 @@ public class MyGraph {
             }
             Airport originalAirportObject = this.allAirports.get(minDistanceAirport.airportCode);  // Original airport object
 
-            // If the target airport is reached, check if a better path with less cost is found
+            // If the target airport is reached store the shortest path and end dijkstra
             if(minDistanceAirport.airportCode.equals(airportDestination.airportCode)) {
                 this.bestSequence = minDistanceAirport.shortestPath;
                 this.leastCost = minDistanceAirport.cost;
@@ -118,10 +123,25 @@ public class MyGraph {
             // Add the parking scenario of the current airport into minheap if it does not exceed the deadline
             Airport parkedVertex = new Airport(minDistanceAirport.airportCode, minDistanceAirport.currentTime + 21600, minDistanceAirport.cost + originalAirportObject.parkingCost);
             if(parkedVertex.currentTime < deadline) {
-                LinkedList<Airport> shortestPath = new LinkedList<>(minDistanceAirport.shortestPath);
-                shortestPath.add(new Airport("PARK", parkedVertex.currentTime, parkedVertex.cost));
-                parkedVertex.shortestPath = shortestPath;
-                minHeap.add(parkedVertex);
+                if(this.vertexTimeCostTable.containsKey(parkedVertex.airportCode + parkedVertex.currentTime)) {
+                    // If this vertex at this time is visited with a less cost currently, add it to minheap and update the min cost for this vertex-time pair
+                    if(this.vertexTimeCostTable.get(parkedVertex.airportCode + parkedVertex.currentTime) > parkedVertex.cost) {
+                        this.vertexTimeCostTable.remove(parkedVertex.airportCode + parkedVertex.currentTime);
+                        this.vertexTimeCostTable.put(parkedVertex.airportCode + parkedVertex.currentTime, parkedVertex.cost);
+
+                        LinkedList<Airport> shortestPath = new LinkedList<>(minDistanceAirport.shortestPath);
+                        shortestPath.add(new Airport("PARK", parkedVertex.currentTime, parkedVertex.cost));
+                        parkedVertex.shortestPath = shortestPath;
+                        minHeap.add(parkedVertex);
+                    }
+                }
+                else {
+                    this.vertexTimeCostTable.put(parkedVertex.airportCode + parkedVertex.currentTime, parkedVertex.cost);
+                    LinkedList<Airport> shortestPath = new LinkedList<>(minDistanceAirport.shortestPath);
+                    shortestPath.add(new Airport("PARK", parkedVertex.currentTime, parkedVertex.cost));
+                    parkedVertex.shortestPath = shortestPath;
+                    minHeap.add(parkedVertex);
+                }
             }
 
             for(Airport neighborAirport : originalAirportObject.neighborAirports) {
@@ -138,6 +158,16 @@ public class MyGraph {
 
                 // If the neighbor airport can be visited with a less flight cost, update the shortest path and cost
                 if(minDistanceAirport.cost + edgeCost < neighborAirport.cost) {
+                    if(this.vertexTimeCostTable.containsKey(neighborAirport.airportCode + (minDistanceAirport.currentTime + flightDuration))) {
+                        if(this.vertexTimeCostTable.get(neighborAirport.airportCode + (minDistanceAirport.currentTime + flightDuration)) < minDistanceAirport.cost + edgeCost) {
+                            continue;
+                        }
+                        else {
+                            this.vertexTimeCostTable.remove(neighborAirport.airportCode + (minDistanceAirport.currentTime + flightDuration));
+                        }
+                    }
+                    this.vertexTimeCostTable.put(neighborAirport.airportCode + (minDistanceAirport.currentTime + flightDuration), minDistanceAirport.cost + edgeCost);
+
                     // Create a new dummy neighbor airport with updated time and total cost to add into minheap
                     Airport dummyNeighborAirport = new Airport(neighborAirport.airportCode, minDistanceAirport.currentTime + flightDuration, minDistanceAirport.cost + edgeCost);
 
@@ -150,6 +180,7 @@ public class MyGraph {
             }
         }
 
+        this.vertexTimeCostTable.clear();
         printLeastCostPath(output);
     }
 

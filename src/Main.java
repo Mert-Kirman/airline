@@ -22,7 +22,7 @@ public class Main {
         FileWriter task2 = new FileWriter("task2-out.txt", true);
 
         // Create and store airport objects
-        File file = new File("TR-0-airports.csv");
+        File file = new File("INTER-0-airports.csv");
         Scanner input = new Scanner(file);
         input.nextLine();
 
@@ -34,7 +34,7 @@ public class Main {
         input.close();
 
         // Create adjacency lists from the input file which includes info about which airports planes fly to from an airport
-        file = new File("TR-0-directions.csv");
+        file = new File("INTER-0-directions.csv");
         input = new Scanner(file);
         input.nextLine();
 
@@ -64,7 +64,7 @@ public class Main {
         input.close();
 
         // Carry out missions
-        file = new File("TR-0-missions.in");  // File containing plane model and mission details
+        file = new File("INTER-0-missions.in");  // File containing plane model and mission details
         input = new Scanner(file);
         String planeModel = input.nextLine().strip();
         switch (planeModel) {  // Choose plane model to use in the missions
