@@ -18,11 +18,11 @@ public class Main {
         // Store all the airport objects
         MyGraph myGraph = new MyGraph();
 
-        FileWriter task1 = new FileWriter("task1-out.txt", true);
-        FileWriter task2 = new FileWriter("task2-out.txt", true);
+        FileWriter task1 = new FileWriter(args[4], true);
+        FileWriter task2 = new FileWriter(args[5], true);
 
         // Create and store airport objects
-        File file = new File("INTER-0-airports.csv");
+        File file = new File(args[0]);
         Scanner input = new Scanner(file);
         input.nextLine();
 
@@ -34,7 +34,7 @@ public class Main {
         input.close();
 
         // Create adjacency lists from the input file which includes info about which airports planes fly to from an airport
-        file = new File("INTER-0-directions.csv");
+        file = new File(args[1]);
         input = new Scanner(file);
         input.nextLine();
 
@@ -47,7 +47,7 @@ public class Main {
         input.close();
 
         // Create airfield objects, insert weatherMultiplier values at given times to object's hashmap
-        file = new File("weather.csv");  // File including weatherCode values of airfields at given times
+        file = new File(args[2]);  // File including weatherCode values of airfields at given times
         input = new Scanner(file);
         input.nextLine();
 
@@ -64,7 +64,7 @@ public class Main {
         input.close();
 
         // Carry out missions
-        file = new File("INTER-0-missions.in");  // File containing plane model and mission details
+        file = new File(args[3]);  // File containing plane model and mission details
         input = new Scanner(file);
         String planeModel = input.nextLine().strip();
         switch (planeModel) {  // Choose plane model to use in the missions
